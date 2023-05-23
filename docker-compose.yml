@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+
+  hamster-mongo:
+    image: "mongo"
+    container_name: "mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+        MONGODB_INITDB_ROOT_USERNAME: "admin"
+        MONGODB_INITDB_ROOT_PASSWORD: "password"
+
+  hamster:
+    build: ./
+    container_name: "hamster"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    depends_on:
+      - hamster-mongo
+    environment:
+      MONGO_URL: "mongo"
+      MONGO_PORT: "27017"
+
+volumes:
+  mongo-data: {}
